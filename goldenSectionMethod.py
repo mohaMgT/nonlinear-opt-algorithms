@@ -1,3 +1,5 @@
+from sympy import *
+
 def print_box(content):
     content_str = f"║ {content} ║"
     width = len(content_str)
@@ -5,8 +7,14 @@ def print_box(content):
     print(content_str)
     print("╚" + "═" * (width - 2) + "╝")
 
-def function(x):
-    return x**2 + 2*x
+def function():
+    X = symbols('x')
+    F = X**2 + 2*X
+    return (X,F)
+
+def function_sub(sub):
+    X,F = function()
+    return F.subs(X,sub)
 
 def checkABOrder(a,b):
     if a > b:
@@ -28,9 +36,9 @@ def GSM(a,b,alpha,ebsilon,iteration):
         mu = a + alpha*(b-a)
         print(f"a = {a}\nb = {b}\nlambda = {lamda}\nmu = {mu}\n")
 
-        if function(lamda) > function(mu):
+        if function_sub(lamda) > function_sub(mu):
             print("****************")
-            print(f"f(lamda) = {function(lamda)}\nf(mu)    = {function(mu)}")
+            print(f"f(lamda) = {function_sub(lamda)}\nf(mu)    = {function_sub(mu)}")
             print(f"f(lamda) > f(mu)\n a = {lamda}\nb = {b}")
             print("****************")
 
@@ -39,7 +47,7 @@ def GSM(a,b,alpha,ebsilon,iteration):
             return GSM(a,b,alpha,ebsilon,iteration)
         else:
             print("****************")
-            print(f"f(lamda) = {function(lamda)}\nf(mu)    = {function(mu)}")
+            print(f"f(lamda) = {function_sub(lamda)}\nf(mu)    = {function_sub(mu)}")
             print(f"* f(lamda) <= f(mu)\na = {a}\nb = {mu}")
             print("****************")
             a = a
@@ -50,3 +58,4 @@ def GSM(a,b,alpha,ebsilon,iteration):
         return (a+b)/2
 
 print(f"result: {GSM(a=-3,b=5,alpha=0.618,ebsilon=0.2,iteration=0)}")
+print(function())
