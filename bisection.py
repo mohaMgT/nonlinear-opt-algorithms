@@ -1,4 +1,5 @@
 from sympy import *
+
 def print_box(content):
     content_str = f"║ {content} ║"
     width = len(content_str)
@@ -16,7 +17,24 @@ def print_brace(title, a, b):
     print(" " + " " * (width // 2) + "⎩")
 
 
-def bisection(a,b,ebsilon,iteration,F,X,FPrime):
+def function():
+    X = symbols('X')
+    F = X**2
+    return (X,F)
+
+def function_sub(sub):
+    X,F = function()
+    return F.subs(X,sub)
+
+def functionPrime():
+    X,F = function()
+    return (X,diff(F,X))
+
+def functionPrimeSub(sub):
+    X,F = functionPrime()
+    return F.subs(X,sub)
+
+def bisection(a,b,ebsilon,iteration):
     print("▀" * 50)    
     print_box(f"iteration = {iteration}")
     iteration += 1
@@ -25,19 +43,18 @@ def bisection(a,b,ebsilon,iteration,F,X,FPrime):
         x = (a+b)/2
         print(f"a == {a}\nb == {b}\nx == {x}")
         
-        fPrimeOfX = FPrime.subs(X,x)
-        # print(f"fPrimeOfX: {fPrimeOfX}")
+        fPrimeOfX = functionPrimeSub(x)
 
         if fPrimeOfX < 0:
             print(f"**********************\nf'(x) < 0\n**********************\na = {x}\nb = {b}")
             a = x
             b = b
-            return bisection(a,b,ebsilon,iteration,F,X,FPrime)
+            return bisection(a,b,ebsilon,iteration)
         elif fPrimeOfX > 0:
             print(f"**********************\nf'(x)> 0\n**********************\na = {a}\nb = {x}")
             a = a
             b = x
-            return bisection(a,b,ebsilon,iteration,F,X,FPrime)
+            return bisection(a,b,ebsilon,iteration)
         else:
             print("**********************\nf'(x) = 0\n**********************")
             return x
@@ -46,11 +63,6 @@ def bisection(a,b,ebsilon,iteration,F,X,FPrime):
         return (a+b)/2
 
 
-
-X = symbols('X')
-F = X**2
-FPrime = diff(F,X)
-
-print(f"result: {bisection(a=-11,b=8,ebsilon=0.0000001,iteration=0,F=F,X=X,FPrime=FPrime)}")
-print(f"f = {F}")
-print(f"f' = {FPrime}")
+print(f"result: {bisection(a=-11,b=8,ebsilon=0.0000001,iteration=0)}")
+print(f"f  : {function()}")
+print(f"f' : {functionPrime()} ")
