@@ -3,6 +3,7 @@ from sympy import *
 def print_box(content):
     content_str = f"║ {content} ║"
     width = len(content_str)
+    print("▀" * 50) 
     print("╔" + "═" * (width - 2) + "╗")
     print(content_str)
     print("╚" + "═" * (width - 2) + "╝")
@@ -34,8 +35,7 @@ def functionPrimeSub(sub):
     X,F = functionPrime()
     return F.subs(X,sub)
 
-def bisection(a,b,ebsilon,iteration):
-    print("▀" * 50)    
+def bisection(a,b,ebsilon,iteration): 
     print_box(f"iteration = {iteration}")
     iteration += 1
 

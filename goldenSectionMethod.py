@@ -3,6 +3,7 @@ from sympy import *
 def print_box(content):
     content_str = f"║ {content} ║"
     width = len(content_str)
+    print("▀" * 50) 
     print("╔" + "═" * (width - 2) + "╗")
     print(content_str)
     print("╚" + "═" * (width - 2) + "╝")
@@ -24,7 +25,6 @@ def checkABOrder(a,b):
     return a,b
 
 def GSM(a,b,alpha,ebsilon,iteration):
-    print("▀" * 50) 
     print_box(f"iteration = {iteration}")
     iteration += 1
 
