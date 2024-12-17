@@ -1,4 +1,5 @@
 from sympy import *
+import time
 
 def print_box(content):
     content_str = f"║ {content} ║"
@@ -59,33 +60,38 @@ def gPrimeArmijoSub(x ,d):
 
 
 def armijoConditionMax(x, d, c=0.2, alpha_init=1, scale=1.25):
-    print("\nstarting calculation armijoMax\n")
     tolerance = 1e-10
     alpha = alpha_init
-    while not(gArmijoSub(alpha,x,d) <= (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d) + tolerance)):
-        print(','*50)
-        print(f"condition: {not(gArmijoSub(alpha,x,d) <= (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d) + tolerance))}")
-        print(f"gArmijoSub(2*alpha,x,d): {gArmijoSub(alpha,x,d)}")
-        print(f"(gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d)): {(gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))}")
-        print(f"alphaArmijo: {alpha}")
-        alpha *= scale
-    print("\nending calculation armijoMax\n")
-    print(','*50)
+    ifCondition = gArmijoSub(alpha,x,d) <= (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))
+    #if ifcondition == false than alpha_init is less than alphaMax
+    #if ifcondition == true than alpha_init is more than alphaMax
+
+    whileCondition = abs(gArmijoSub(alpha,x,d) - (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))) < tolerance
+    if ifCondition == false:
+        while not(abs(gArmijoSub(alpha,x,d) - (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))) < tolerance):
+            alpha *= scale
+    else:
+        scale = 1 - abs(scale - 1)
+        while not(abs(gArmijoSub(alpha,x,d) - (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))) < tolerance):
+            alpha *= scale
+        
     return alpha
 
-def armijoconditionMin(x, d, c=0.4, alpha_init=1, scale=0.25):
-    print(f"\n    starting calculation armijoMin\n")
-    tolerance = 1e-10
+def armijoconditionMin(x, d, c=0.4, alpha_init=1, scale=0.75):
+    tolerance = 1e-5
     alpha = alpha_init
-    while not(gArmijoSub(2*alpha,x,d) > (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d)- tolerance)):
-        print(','*50)
-        print(f"condition: {not(gArmijoSub(2*alpha,x,d) > (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d)- tolerance))}")
-        print(f"gArmijoSub(2*alpha,x,d): {gArmijoSub(2*alpha,x,d)}")
-        print(f"(gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d)): {(gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))}")
-        print(f"alpha: {alpha}")
-        alpha *= scale
-    print("Ending Calculation armijoMin")
-    print(','*50)
+    ifCondition = gArmijoSub(2*alpha,x,d) > (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))
+    #if ifCondition == false than alpha_init is more than alphaMin
+    #if ifCondition == true than alpha_init is less than alphaMin
+
+    if ifCondition == false:
+        while abs(gArmijoSub(2*alpha,x,d) - (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))) >= tolerance:
+            alpha *= scale
+    else:
+        scale = 1 + abs(scale - 1)
+        while abs(gArmijoSub(2*alpha,x,d) - (gArmijoSub(0,x,d) + c*alpha*gPrimeArmijoSub(x, d))) >= tolerance:
+            alpha *= scale
+        
     return alpha
 
 
